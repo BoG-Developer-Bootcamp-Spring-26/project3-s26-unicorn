@@ -8,7 +8,7 @@ There are a lot of "bonuses" included in the specifications in this project. We 
 
 ## Submission
 
-- **Due: 4/9/26**
+- **Due: either 4/7/26 or 4/9/26**
 
 ## Getting Started
 
