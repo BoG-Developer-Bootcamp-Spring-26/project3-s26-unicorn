@@ -1,32 +1,26 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const User = new mongoose.Schema({
     id: {
-        type: ObjectId,
-        required: true
+        type: mongoose.Types.ObjectId,
+        required: true,
     },
     fullName: {
         type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     admin: {
         type: Boolean,
-        required: true
-    }
+        required: true,
+    },
+});
 
-})
-User {
-  _id: ObjectId // user's ID
-  fullName: string // user's full name
-  email: string // user's email
-  password: string // user's password
-  admin: boolean // holds whether or not a user is an admin
-}
+export { User };

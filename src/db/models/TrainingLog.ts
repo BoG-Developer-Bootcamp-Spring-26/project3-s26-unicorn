@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import { User } from "./User";
 
 const TrainingLog = new mongoose.Schema({
     id: {
-        type: ObjectId,
+        type: mongoose.Types.ObjectId,
         required: true,
     },
     user: {
@@ -10,7 +11,7 @@ const TrainingLog = new mongoose.Schema({
         required: true,
     },
     animal: {
-        type: ObjectId,
+        type: mongoose.Types.ObjectId,
         required: true,
     },
     title: {
