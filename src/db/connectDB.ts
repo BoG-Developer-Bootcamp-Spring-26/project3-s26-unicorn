@@ -1,10 +1,26 @@
 import mongoose from "mongoose";
 
-async function connect() {
+let isConnected = false;
+
+async function connectDB() {
+    if (isConnected) {
+        return;
+    }
+
+    const dbURL = process.env.DB_URL;
+
+    if (!dbURL) {
+        throw new Error("DB_URL is not defined in env");
+    }
+
     try {
-        await mongoose.connect(process.env.DB_URL)
-        console.log("Connected to MongoDB")
+        await mongoose.connect(dbURL);
+        isConnected = true;
+        console.log("Connected to MongoDB");
     } catch (e) {
-        console.log("Unable to connect", e)
+        console.error("Unable to connect", e);
+        throw e;
     }
 }
+
+export default connectDB;
