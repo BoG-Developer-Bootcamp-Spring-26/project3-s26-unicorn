@@ -1,12 +1,11 @@
-import NavBar from "@/components/NavBar";
 import Circle from "@/components/Circle";
+import Link from "next/link";
 
 export default function Home() {
     return (
         <>
-            <NavBar />
             <Circle />
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center pb-14">
                 <p className="mt-48 font-bold text-[50px]">Login</p>
                 <div className="w-[500px]">
                     <input
@@ -18,7 +17,7 @@ export default function Home() {
                     <input
                         id="password"
                         className="py-1 px-1 mt-12 mr-3 w-full leading-tight text-black bg-transparent appearance-none focus:outline-none border-b-[2.5px] border-[#D21312]"
-                        type="text"
+                        type="password"
                         placeholder="Password"
                     />
                     <button
@@ -30,9 +29,9 @@ export default function Home() {
                 </div>
                 <p className="mt-4 text-2xl">
                     Don't have an account?{" "}
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a">
+                    <Link href="/create-account">
                         <b>Sign up</b>
-                    </a>
+                    </Link>
                 </p>
             </div>
         </>

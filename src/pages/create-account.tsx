@@ -1,10 +1,11 @@
 import Circle from "@/components/Circle";
+import Link from "next/link";
 
 export default function CreateAccount() {
     return (
         <>
             <Circle />
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center pb-14">
                 <p className="mt-48 font-bold text-[50px]">Create Account</p>
                 <div className="w-[500px]">
                     <input
@@ -54,9 +55,9 @@ export default function CreateAccount() {
                 </div>
                 <p className="mt-4 text-2xl">
                     Don't have an account?{" "}
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a">
+                    <Link href="/">
                         <b>Sign up</b>
-                    </a>
+                    </Link>
                 </p>
             </div>
         </>
