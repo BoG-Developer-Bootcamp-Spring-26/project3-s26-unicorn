@@ -1,7 +1,41 @@
 import Circle from "@/components/Circle";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Home() {
+    const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+
+    async function login() {
+        setMessage("");
+
+        if (!email) {
+            setMessage("Email required");
+        }
+        if (!password) {
+            setMessage("Password required");
+        }
+        if (!email || !password) {
+            return;
+        }
+
+        const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (res.ok) {
+            router.push("/dashboard");
+        } else {
+            const data = await res.json();
+            setMessage(data.error);
+        }
+    }
+
     return (
         <>
             <Circle />
@@ -32,6 +66,7 @@ export default function Home() {
                     <Link href="/create-account">
                         <b>Sign up</b>
                     </Link>
+                    <div id="message">{message}</div>
                 </p>
             </div>
         </>

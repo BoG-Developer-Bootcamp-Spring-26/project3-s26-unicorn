@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "argon2": "^0.44.0",
     "cookie": "^1.1.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.3.1",

@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 
-const AnimalSchema = new mongoose.Schema({
-    id: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-    },
+interface IAnimal {
+    name: string;
+    breed: string;
+    owner: mongoose.Types.ObjectId;
+    hoursTrained: number;
+    profilePicture: string;
+}
+
+const AnimalSchema = new mongoose.Schema<IAnimal>({
     name: {
         type: String,
         required: true,
@@ -26,3 +30,5 @@ const AnimalSchema = new mongoose.Schema({
         required: true,
     },
 });
+
+export const Animal = mongoose.model("Animal", AnimalSchema);

@@ -1,13 +1,17 @@
 import mongoose from "mongoose";
-import { User } from "./User";
 
-const TrainingLog = new mongoose.Schema({
-    id: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-    },
+interface ITrainingLog {
+    user: mongoose.Types.ObjectId;
+    animal: mongoose.Types.ObjectId;
+    title: string;
+    date: Date;
+    description: string;
+    hours: number;
+}
+
+const TrainingLogSchema = new mongoose.Schema<ITrainingLog>({
     user: {
-        type: User,
+        type: mongoose.Types.ObjectId,
         required: true,
     },
     animal: {
@@ -31,3 +35,5 @@ const TrainingLog = new mongoose.Schema({
         required: true,
     },
 });
+
+export const TrainingLog = mongoose.model("TrainingLog", TrainingLogSchema);

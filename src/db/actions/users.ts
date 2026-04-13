@@ -4,19 +4,25 @@ import { User } from "@/db/models/User";
 
 type CreateUserInput = {
     firstName: string;
+    middleName?: string;
     lastName: string;
     email: string;
     password: string;
     admin?: boolean;
 };
 
-async function createUser({ firstName, lastName, email, password, admin = false }: CreateUserInput) {
+async function createUser({
+    firstName,
+    middleName,
+    lastName,
+    email,
+    password,
+    admin = false,
+}: CreateUserInput) {
     await connectDB();
 
-    const UserModel = mongoose.models.User || mongoose.model("User", User);
-
     const formattedEmail = email.trim().toLowerCase();
-    const existingUser = await UserModel.findOne({ email: formattedEmail });
+    const existingUser = await User.findOne({ email: formattedEmail });
 
     if (existingUser) {
         throw new Error("A user with this email already exists.");
@@ -24,10 +30,9 @@ async function createUser({ firstName, lastName, email, password, admin = false 
 
     const objectId = new mongoose.Types.ObjectId();
 
-    const createdUser = await UserModel.create({
-        _id: objectId,
-        id: objectId,
+    const createdUser = await User.create({
         firstName: firstName.trim(),
+        middleName: middleName?.trim(),
         lastName: lastName.trim(),
         email: formattedEmail,
         password,
@@ -37,6 +42,7 @@ async function createUser({ firstName, lastName, email, password, admin = false 
     return {
         id: String(createdUser.id),
         firstName: String(createdUser.firstName),
+        middleName: String(createdUser.middleName),
         lastName: String(createdUser.lastName),
         email: String(createdUser.email),
         admin: Boolean(createdUser.admin),

@@ -1,10 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from "next/types";
+import connectDB from "@/db/connectDB";
+import argon2 from "argon2";
+import { User } from "@/db/models/User";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse,
+) {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password required" });
+    }
     await connectDB();
 
-    const user = await db.users.findOne({ email });
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(401).json({ error: "Wrong password or email" });
+    }
+    const validPassword = await argon2.verify(user.password, password);
+    if (!validPassword) {
+        return res.status(401).json({ error: "Wrong password or email" });
+    }
 
-    res.setHeader("Set-Cookie");
+    res.setHeader("Set-Cookie", `userId=${user._id}; Path=/; HttpOnly`);
+    res.status(200).json({ success: true });
 }
