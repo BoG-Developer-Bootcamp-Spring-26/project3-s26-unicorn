@@ -13,10 +13,10 @@ export default function Home() {
         setMessage("");
 
         if (!email) {
-            setMessage("Email required");
+            return setMessage("Email required");
         }
         if (!password) {
-            setMessage("Password required");
+            return setMessage("Password required");
         }
         if (!email || !password) {
             return;
@@ -47,16 +47,19 @@ export default function Home() {
                         className="py-1 px-1 mt-12 mr-3 w-full leading-tight bg-transparent appearance-none focus:outline-none border-b-[2.5px] border-[#D21312]"
                         type="text"
                         placeholder="Email"
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <input
                         id="password"
                         className="py-1 px-1 mt-12 mr-3 w-full leading-tight text-black bg-transparent appearance-none focus:outline-none border-b-[2.5px] border-[#D21312]"
                         type="password"
                         placeholder="Password"
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <button
                         className="py-3 mt-12 w-full text-3xl font-bold text-white rounded-2xl hover:bg-red-800 bg-[#D21312]"
                         type="button"
+                        onClick={login}
                     >
                         Log in
                     </button>

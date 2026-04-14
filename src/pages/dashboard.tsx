@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             },
         };
     }
-    return { props: [] };
+    return { props: {} };
 };
 
 export default function Dashboard() {

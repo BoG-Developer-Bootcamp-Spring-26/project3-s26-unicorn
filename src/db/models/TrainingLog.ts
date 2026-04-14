@@ -36,4 +36,6 @@ const TrainingLogSchema = new mongoose.Schema<ITrainingLog>({
     },
 });
 
-export const TrainingLog = mongoose.model("TrainingLog", TrainingLogSchema);
+export const TrainingLog =
+    mongoose.models.TrainingLog ||
+    mongoose.model("TrainingLog", TrainingLogSchema);

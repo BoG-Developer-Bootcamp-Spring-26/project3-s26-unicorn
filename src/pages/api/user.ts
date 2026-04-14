@@ -7,6 +7,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
+    console.log(req.body);
     if (req.method !== "POST") {
         return res
             .status(405)
@@ -18,8 +19,7 @@ export default async function handler(
     if (
         typeof firstName !== "string" ||
         !firstName.trim() ||
-        typeof middleName !== "string" ||
-        !middleName.trim() ||
+        (typeof middleName !== "undefined" && typeof middleName !== "string") ||
         typeof lastName !== "string" ||
         !lastName.trim() ||
         typeof email !== "string" ||
@@ -29,8 +29,7 @@ export default async function handler(
     ) {
         return res.status(400).json({
             success: false,
-            message:
-                "Missing or invalid firstName, middleName, lastName, email, or password",
+            message: "Missing or invalid first name, last name, email, or password",
         });
     }
 
@@ -54,11 +53,11 @@ export default async function handler(
         await connectDB();
         const user = await User.create({
             firstName: firstName.trim(),
-            middleName: middleName.trim(),
+            middleName: middleName?.trim(),
             lastName: lastName.trim(),
             email: email.trim().toLowerCase(),
             password: passwordHash,
-            admin,
+            admin: admin,
         });
         return res.status(200).json({
             success: true,
@@ -71,16 +70,6 @@ export default async function handler(
             admin: user.admin,
         });
     } catch (e) {
-        if (
-            e &&
-            typeof e === "object" &&
-            "code" in e &&
-            (e as { code: number }).code === 11000
-        ) {
-            return res
-                .status(400)
-                .json({ success: false, message: "Email already registered" });
-        }
         console.error(e);
         return res
             .status(500)
