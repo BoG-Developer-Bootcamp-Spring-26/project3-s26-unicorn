@@ -10,6 +10,11 @@ type CreateUserInput = {
     admin?: boolean;
 };
 
+type SignInUserInput = {
+    email: string;
+    password: string;
+};
+
 async function createUser({ firstName, lastName, email, password, admin = false }: CreateUserInput) {
     await connectDB();
 
@@ -43,5 +48,27 @@ async function createUser({ firstName, lastName, email, password, admin = false 
     };
 }
 
+async function signInUser({ email, password }: SignInUserInput) {
+    await connectDB();
+
+    const UserModel = mongoose.models.User || mongoose.model("User", User);
+    const formattedEmail = email.trim().toLowerCase();
+
+    const existingUser = await UserModel.findOne({ email: formattedEmail });
+
+    if (!existingUser || String(existingUser.password) !== password) {
+        throw new Error("Invalid email or password.");
+    }
+
+    return {
+        id: String(existingUser.id),
+        firstName: String(existingUser.firstName),
+        lastName: String(existingUser.lastName),
+        email: String(existingUser.email),
+        admin: Boolean(existingUser.admin),
+    };
+}
+
 export { createUser };
-export type { CreateUserInput };
+export { signInUser };
+export type { CreateUserInput, SignInUserInput };
