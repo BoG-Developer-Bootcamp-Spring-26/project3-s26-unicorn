@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function NavBar() {
     return (
-        <div className="flex sticky top-0 justify-start items-center shadow-lg shadow-gray-400">
+        <div className="flex sticky top-0 justify-start items-center bg-white shadow-lg shadow-gray-400">
             <Image
                 src="/images/appLogo.png"
                 width={83}

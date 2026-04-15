@@ -29,7 +29,7 @@ export default function Home() {
         });
 
         if (res.ok) {
-            router.push("/dashboard");
+            router.push("/training-logs");
         } else {
             const data = await res.json();
             setMessage(data.error);
@@ -69,8 +69,8 @@ export default function Home() {
                     <Link href="/create-account">
                         <b>Sign up</b>
                     </Link>
-                    <div id="message">{message}</div>
                 </p>
+                <div className="mt-2 text-red-500">{message}</div>{" "}
             </div>
         </>
     );

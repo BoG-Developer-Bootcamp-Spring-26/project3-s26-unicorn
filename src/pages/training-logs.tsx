@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: {} };
 };
 
-export default function Dashboard() {
+export default function TrainingLogs() {
     const [view, setView] = useState("Training Logs");
     return (
         <div>
