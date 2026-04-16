@@ -40,9 +40,16 @@ export default function SideBar({ isAdmin }: { isAdmin: boolean }) {
             inactiveImg: "/images/inactiveAnimalLogo.png",
         },
     ];
+    const logoutLink = {
+        label: "Log Out",
+        href: "/",
+        activeImg: "/images/logoutLogo.png",
+        inactiveImg: "/images/logoutLogo.png",
+    };
     return (
-        <div className="flex fixed left-0 top-20 flex-col w-64 h-screen border-r border-gray-200">
-            <nav className="flex flex-col gap-2 p-4 mt-4">
+        <div className="flex fixed left-0 top-20 bottom-0 flex-col w-64 border-r border-gray-200">
+            <nav className="flex flex-col h-full p-4 mt-4">
+                <div className="flex flex-col gap-2">
                 {regularLinks.map((link) => (
                     <Link
                         key={link.href}
@@ -94,6 +101,23 @@ export default function SideBar({ isAdmin }: { isAdmin: boolean }) {
                         ))}
                     </>
                 )}
+                </div>
+
+                <Link
+                    href={logoutLink.href}
+                    className="mt-auto p-3 rounded-lg transition-all hover:bg-[#D21312]"
+                >
+                    <div className="flex flex-row">
+                        <Image
+                            src={logoutLink.inactiveImg}
+                            width={20}
+                            height={20}
+                            alt={logoutLink.label}
+                            className="pr-2 w-7 h-5"
+                        />
+                        {logoutLink.label}
+                    </div>
+                </Link>
             </nav>
         </div>
     );
