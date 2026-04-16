@@ -14,18 +14,19 @@ type UserRow = {
 type AllUsersProps = {
     isAdmin: boolean;
     users: UserRow[];
+    name: string;
 };
 
-export default function AllUsers({ isAdmin, users }: AllUsersProps) {
+export default function AllUsers({ isAdmin, users, name }: AllUsersProps) {
     return (
-        <div>
-            <SideBar isAdmin={isAdmin} />
-            <div className="ml-64">
-                <div className="pt-6 pl-4 pb-4 border-b border-b-gray-500 text-xl font-semibold">
-                    All Users 
+        <div className="flex flex-row">
+            <SideBar isAdmin={isAdmin} name={name} />
+            <div className="p-3">
+                <div className="pt-6 pb-4 pl-4 text-xl font-semibold border-b border-b-gray-500">
+                    All Users
                 </div>
 
-                <div className="grid grid-cols-4 gap-4 px-4 py-3 font-semibold border-b border-gray-500">
+                <div className="grid grid-cols-4 gap-4 py-3 px-4 font-semibold border-b border-gray-500">
                     <div>First Name</div>
                     <div>Middle Name</div>
                     <div>Last Name</div>
@@ -35,8 +36,9 @@ export default function AllUsers({ isAdmin, users }: AllUsersProps) {
                 {users.map((user, index) => (
                     <div
                         key={`${user.email}-${index}`}
-                        className="grid grid-cols-4 gap-4 px-4 py-3 border-b border-gray-300"
+                        className="grid grid-cols-4 gap-4 py-3 px-4 border-b border-gray-300"
                     >
+                        {" "}
                         <div>{user.firstName}</div>
                         <div>{user.middleName || ""}</div>
                         <div>{user.lastName}</div>
@@ -51,10 +53,17 @@ export default function AllUsers({ isAdmin, users }: AllUsersProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const userId = context.req.cookies.userId;
     await connectDB();
 
-    const usersFromDB = await User.find({}, "firstName middleName lastName email admin").lean();
+    const user = await User.findById(userId);
+    if (!user) return { redirect: { destination: "/", permanent: false } };
+
+    const usersFromDB = await User.find(
+        {},
+        "firstName middleName lastName email admin",
+    ).lean();
 
     const users: UserRow[] = usersFromDB.map((user: any) => ({
         firstName: user.firstName || "",
@@ -68,6 +77,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         props: {
             isAdmin: true,
             users,
+            name: user.firstName + " " + user.lastName,
         },
     };
 };
