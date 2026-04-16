@@ -153,5 +153,6 @@ export default function SideBar({
                         </div>
                     </div>
                 </div>
-                );
+        </div>
+    );
 }
