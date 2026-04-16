@@ -14,7 +14,7 @@ export default async function handler(
     }
     await connectDB();
 
-    const user = await User.findOne({ email.trim().toLowerCase() });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
     if (!user) {
         return res.status(500).json({ error: "Wrong password or email" });
     }
