@@ -26,7 +26,7 @@ export default async function handler(
             !profilePicture.trim()
         ) {
             return res
-                .status(400)
+                .status(500)
                 .json({ success: false, message: "Missing or invalid fields" });
         }
 
@@ -66,7 +66,7 @@ export default async function handler(
             hoursTrained < 0
         ) {
             return res
-                .status(400)
+                .status(500)
                 .json({ success: false, message: "Missing or invalid fields" });
         }
 
@@ -80,7 +80,7 @@ export default async function handler(
 
             if (!animal)
                 return res
-                    .status(400)
+                    .status(500)
                     .json({ success: false, message: "Animal does not exist" });
 
             return res.status(200).json({
@@ -101,7 +101,5 @@ export default async function handler(
         }
     }
 
-    return res
-        .status(405)
-        .json({ success: false, message: "Method not allowed" });
+    return res;
 }

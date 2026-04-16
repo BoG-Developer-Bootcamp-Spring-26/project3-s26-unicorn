@@ -1,8 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Avatar from "./Avatar";
 
-export default function SideBar({ isAdmin }: { isAdmin: boolean }) {
+export default function SideBar({
+    isAdmin,
+    name,
+}: {
+    isAdmin: boolean;
+    name: string;
+}) {
     const router = useRouter();
 
     const regularLinks = [
@@ -41,8 +48,8 @@ export default function SideBar({ isAdmin }: { isAdmin: boolean }) {
         },
     ];
     return (
-        <div className="flex fixed left-0 top-20 flex-col w-64 h-screen border-r border-gray-200">
-            <nav className="flex flex-col gap-2 p-4 mt-4">
+        <div className="flex left-0 top-20 flex-col w-64 border-r border-gray-200 h-[calc(100vh-5rem)]">
+            <nav className="flex flex-col flex-1 gap-2 p-4 mt-4">
                 {regularLinks.map((link) => (
                     <Link
                         key={link.href}
@@ -95,6 +102,27 @@ export default function SideBar({ isAdmin }: { isAdmin: boolean }) {
                     </>
                 )}
             </nav>
+
+            <div className="py-5 mx-3 border-t border-gray-200">
+                <div className="flex flex-row">
+                    <Avatar name={name} />
+                    <div className="flex flex-col pl-3">
+                        <p className="text-sm font-bold">{name}</p>
+                        <p className="text-xs text-gray-500">
+                            {isAdmin ? "admin" : "user"}
+                        </p>
+                    </div>
+                    <button>
+                        <Image
+                            src="/images/logoutLogo.png"
+                            alt="log out"
+                            width={5}
+                            height={5}
+                            className="h-auto w-[5px]"
+                        />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

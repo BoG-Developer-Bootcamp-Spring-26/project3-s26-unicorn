@@ -14,15 +14,15 @@ export default async function handler(
     }
     await connectDB();
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email.trim().toLowerCase() });
     if (!user) {
-        return res.status(401).json({ error: "Wrong password or email" });
+        return res.status(500).json({ error: "Wrong password or email" });
     }
     const validPassword = await argon2.verify(user.password, password);
     if (!validPassword) {
-        return res.status(401).json({ error: "Wrong password or email" });
+        return res.status(500).json({ error: "Wrong password or email" });
     }
 
     res.setHeader("Set-Cookie", `userId=${user._id}; Path=/; HttpOnly`);
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, id: user._id, admin: user.admin });
 }

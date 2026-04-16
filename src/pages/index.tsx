@@ -22,7 +22,7 @@ export default function Home() {
             return;
         }
 
-        const res = await fetch("/api/login", {
+        const res = await fetch("/api/user/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),

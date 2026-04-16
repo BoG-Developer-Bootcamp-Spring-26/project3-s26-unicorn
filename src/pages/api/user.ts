@@ -8,71 +8,68 @@ export default async function handler(
     res: NextApiResponse,
 ) {
     console.log(req.body);
-    if (req.method !== "POST") {
-        return res
-            .status(405)
-            .json({ success: false, message: "Method not allowed" });
-    }
+    if (req.method == "POST") {
+        const { firstName, middleName, lastName, email, password, admin } =
+            req.body;
 
-    const { firstName, middleName, lastName, email, password, admin } = req.body;
+        if (
+            typeof firstName !== "string" ||
+            !firstName.trim() ||
+            (typeof middleName !== "undefined" && typeof middleName !== "string") ||
+            typeof lastName !== "string" ||
+            !lastName.trim() ||
+            typeof email !== "string" ||
+            !email.trim() ||
+            typeof password !== "string" ||
+            !password
+        ) {
+            return res.status(500).json({
+                success: false,
+                message: "Missing or invalid first name, last name, email, or password",
+            });
+        }
 
-    if (
-        typeof firstName !== "string" ||
-        !firstName.trim() ||
-        (typeof middleName !== "undefined" && typeof middleName !== "string") ||
-        typeof lastName !== "string" ||
-        !lastName.trim() ||
-        typeof email !== "string" ||
-        !email.trim() ||
-        typeof password !== "string" ||
-        !password
-    ) {
-        return res.status(400).json({
-            success: false,
-            message: "Missing or invalid first name, last name, email, or password",
-        });
-    }
+        if (typeof admin !== "boolean") {
+            return res
+                .status(500)
+                .json({ success: false, message: "admin must be a boolean" });
+        }
 
-    if (typeof admin !== "boolean") {
-        return res
-            .status(400)
-            .json({ success: false, message: "admin must be a boolean" });
-    }
+        let passwordHash: string;
+        try {
+            passwordHash = await argon2.hash(password);
+        } catch (e) {
+            console.error(e);
+            return res
+                .status(500)
+                .json({ success: false, message: "Unable to hash password" });
+        }
 
-    let passwordHash: string;
-    try {
-        passwordHash = await argon2.hash(password);
-    } catch (e) {
-        console.error(e);
-        return res
-            .status(500)
-            .json({ success: false, message: "Unable to hash password" });
-    }
-
-    try {
-        await connectDB();
-        const user = await User.create({
-            firstName: firstName.trim(),
-            middleName: middleName?.trim(),
-            lastName: lastName.trim(),
-            email: email.trim().toLowerCase(),
-            password: passwordHash,
-            admin: admin,
-        });
-        return res.status(200).json({
-            success: true,
-            message: "User created successfully",
-            id: user._id.toString(),
-            firstName: user.firstName,
-            middleName: user.middleName,
-            lastName: user.lastName,
-            email: user.email,
-            admin: user.admin,
-        });
-    } catch (e) {
-        console.error(e);
-        return res
-            .status(500)
-            .json({ success: false, message: "Unable to create user" });
+        try {
+            await connectDB();
+            const user = await User.create({
+                firstName: firstName.trim(),
+                middleName: middleName?.trim(),
+                lastName: lastName.trim(),
+                email: email.trim().toLowerCase(),
+                password: passwordHash,
+                admin: admin,
+            });
+            return res.status(200).json({
+                success: true,
+                message: "User created successfully",
+                id: user._id.toString(),
+                firstName: user.firstName,
+                middleName: user.middleName,
+                lastName: user.lastName,
+                email: user.email,
+                admin: user.admin,
+            });
+        } catch (e) {
+            console.error(e);
+            return res
+                .status(500)
+                .json({ success: false, message: "Unable to create user" });
+        }
     }
 }
