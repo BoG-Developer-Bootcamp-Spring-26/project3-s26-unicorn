@@ -1,7 +1,8 @@
 import SearchBar from "@/components/SearchBar";
 import SideBar from "@/components/SideBar";
-import { useState } from "react";
 import { GetServerSideProps } from "next";
+import connectDB from "@/db/connectDB";
+import { User } from "@/db/models/User";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const userId = context.req.cookies.userId;
@@ -13,15 +14,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             },
         };
     }
-    return { props: {} };
+    await connectDB();
+    const user = await User.findById(userId);
+    return { props: { isAdmin: user.admin } };
 };
 
-export default function TrainingLogs() {
-    const [view, setView] = useState("Training Logs");
+export default function TrainingLogs({ isAdmin }: { isAdmin: boolean }) {
     return (
         <div>
-            <SideBar />
-            <div className="pt-6 border-b border-b-gray-500">{view}</div>
+            <SideBar isAdmin={isAdmin} />
+            <div className="pt-6 pl-4 ml-64 border-b border-b-gray-500">
+                Training Logs
+            </div>
         </div>
     );
 }
