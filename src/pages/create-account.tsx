@@ -2,6 +2,7 @@ import Circle from "@/components/Circle";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { format } from "path";
 
 export default function CreateAccount() {
     const router = useRouter();
@@ -21,7 +22,8 @@ export default function CreateAccount() {
             return setMessage("Last name required");
         }
 
-        if (!email) {
+        const formattedEmail = email.trim().toLowerCase();
+        if (!formattedEmail) {
             return setMessage("Email required");
         }
         if (!password) {
@@ -44,7 +46,7 @@ export default function CreateAccount() {
                 firstName,
                 middleName,
                 lastName,
-                email,
+                email:formattedEmail,
                 password,
                 admin: isAdmin,
             }),
@@ -54,7 +56,7 @@ export default function CreateAccount() {
             router.push("/");
         } else {
             const data = await res.json();
-            setMessage(data.message);
+            setMessage(data.message || "Error creating account");
         }
     }
     return (

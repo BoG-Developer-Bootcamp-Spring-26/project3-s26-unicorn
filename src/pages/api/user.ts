@@ -39,6 +39,12 @@ export default async function handler(
             .json({ success: false, message: "admin must be a boolean" });
     }
 
+    const formattedEmail = email.trim().toLowerCase();
+    const existingUser = await User.findOne({ email: formattedEmail });
+    if (existingUser) {
+        return res.status(400).json({ success: false, message: "Email already in use" });
+    }
+    
     let passwordHash: string;
     try {
         passwordHash = await argon2.hash(password);
